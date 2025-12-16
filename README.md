@@ -1,4 +1,4 @@
-# Solana Transaction Parser
+# Solana Transaction Decoder
 
 A robust, extensible TypeScript library for parsing Solana transactions into structured, human-readable data.
 
@@ -12,14 +12,14 @@ A robust, extensible TypeScript library for parsing Solana transactions into str
 ## Installation
 
 ```bash
-pnpm add solana-tx-parser @solana/web3.js @coral-xyz/anchor decimal.js
+pnpm add solana-tx-decoder @solana/web3.js @coral-xyz/anchor decimal.js
 ```
 
 ## Usage
 
 ```typescript
 import { Connection } from '@solana/web3.js';
-import { SolanaParser } from 'solana-tx-parser';
+import { SolanaParser } from 'solana-tx-decoder';
 
 async function main() {
   const connection = new Connection("https://api.mainnet-beta.solana.com");
@@ -43,7 +43,7 @@ main();
 Implement the `Parser` interface and register it:
 
 ```typescript
-import { Parser, ParserContext, ParsedAction } from 'solana-tx-parser/types';
+import { Parser, ParserContext, ParsedAction } from 'solana-tx-decoder/types';
 
 class MyProtocolParser implements Parser {
   programId = new PublicKey("MyProtocol11111111111111111111111111111111");
