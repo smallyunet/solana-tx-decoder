@@ -6,7 +6,7 @@
   "scripts": {
     "test": "vitest",
     "build": "tsc",
-    "docs": "typedoc --out docs src/index.ts"
+    "build:docs": "typedoc --out docs src/index.ts"
   },
   "keywords": [],
   "author": "",
