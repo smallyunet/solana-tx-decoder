@@ -1,5 +1,10 @@
 # Solana Transaction Decoder
 
+[![npm version](https://img.shields.io/npm/v/solana-tx-decoder.svg?style=flat-square)](https://www.npmjs.com/package/solana-tx-decoder)
+[![License](https://img.shields.io/npm/l/solana-tx-decoder.svg?style=flat-square)](https://github.com/smallyun/solana-tx-decoder/blob/main/LICENSE)
+[![CI](https://github.com/smallyun/solana-tx-decoder/actions/workflows/ci.yml/badge.svg)](https://github.com/smallyun/solana-tx-decoder/actions/workflows/ci.yml)
+
+
 A robust, extensible TypeScript library for parsing Solana transactions into structured, human-readable data.
 
 ## Features
