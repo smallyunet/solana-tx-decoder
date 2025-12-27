@@ -1,18 +1,23 @@
 import { defineConfig } from 'vite';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import path from 'path';
+import react from '@vitejs/plugin-react';
 
 export default defineConfig({
     plugins: [
+        react(),
         nodePolyfills({
-            // Whether to polyfill `node:` protocol imports.
             protocolImports: true,
         }),
     ],
+    base: './',
+    build: {
+        outDir: '../../docs/demo',
+        emptyOutDir: true
+    },
     resolve: {
         alias: {
-            // Alias src to allow importing direct source implementation
-            '../../src': path.resolve(__dirname, '../../src')
+            '@src': path.resolve(__dirname, '../../src')
         }
     },
     define: {

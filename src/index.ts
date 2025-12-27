@@ -9,6 +9,8 @@ import { ParsedResult, ParserContext, ParsedAction } from './types';
 // Re-export types for consumers
 export * from './types';
 export { ParserRegistry } from './core/registry';
+export { TransactionView } from './ui/TransactionView';
+export { ActionCard } from './ui/components/ActionCard';
 
 export class SolanaParser {
     private connection: Connection;
