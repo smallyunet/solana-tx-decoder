@@ -35,6 +35,19 @@ export const ActionCard: React.FC<ActionCardProps> = ({ action, index }) => {
 
             <div className="summary" style={{ fontSize: '1.1rem', fontWeight: 500 }}>
                 {action.summary}
+                {action.totalUsd && (
+                    <span style={{
+                        marginLeft: '0.5rem',
+                        color: '#14F195',
+                        fontSize: '0.9rem',
+                        verticalAlign: 'middle',
+                        backgroundColor: 'rgba(20, 241, 149, 0.1)',
+                        padding: '2px 6px',
+                        borderRadius: '4px'
+                    }}>
+                        (${action.totalUsd.toFixed(2)})
+                    </span>
+                )}
             </div>
 
             {action.details && Object.keys(action.details).length > 0 && (

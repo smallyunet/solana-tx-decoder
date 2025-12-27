@@ -1,6 +1,6 @@
 {
   "name": "solana-tx-decoder",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "description": "A robust, extensible TypeScript library for parsing Solana transactions into structured, human-readable data",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

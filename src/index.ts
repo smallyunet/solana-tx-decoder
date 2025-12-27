@@ -1,12 +1,14 @@
-import { Connection, PublicKey, TransactionResponse, VersionedTransactionResponse, Transaction, VersionedTransaction, Message, VersionedMessage } from '@solana/web3.js';
+import { Connection, PublicKey, TransactionResponse, VersionedTransactionResponse, Transaction, VersionedTransaction, Message, VersionedMessage, MessageV0 } from '@solana/web3.js';
+import { AddressResolver } from './core/address-resolver';
 import { ParserRegistry } from './core/registry';
 import { SystemProgramParser } from './parsers/system';
 import { SplTokenParser } from './parsers/spl-token';
 import { JupiterParser } from './parsers/jupiter';
 import { AnchorParser } from './parsers/anchor';
-import { RaydiumParser } from './parsers/raydium';
+import { RaydiumParser, RAYDIUM_PROGRAM_IDS } from './parsers/raydium';
 import { OrcaParser } from './parsers/orca';
 import { ParsedResult, ParserContext, ParsedAction } from './types';
+import { PriceService, JupiterPriceService } from './services/price-service';
 
 // Re-export types for consumers
 export * from './types';
@@ -18,17 +20,25 @@ export class SolanaParser {
     private connection: Connection;
     private registry: ParserRegistry;
     private anchorParser: AnchorParser;
+    private priceService: PriceService;
 
     constructor(connection: Connection) {
         this.connection = connection;
         this.registry = new ParserRegistry();
         this.anchorParser = new AnchorParser();
+        this.priceService = new JupiterPriceService();
 
         // Register default parsers
         this.registry.register(new SystemProgramParser());
         this.registry.register(new SplTokenParser());
         this.registry.register(new JupiterParser());
-        this.registry.register(new RaydiumParser());
+
+        const raydiumParser = new RaydiumParser();
+        // Register for all Raydium program IDs
+        RAYDIUM_PROGRAM_IDS.forEach(id => {
+            this.registry.register(raydiumParser, id);
+        });
+
         this.registry.register(new OrcaParser());
     }
 
@@ -76,6 +86,10 @@ export class SolanaParser {
 
         const actions = await this.parseMessageInstructions(message, accountKeys, innerInstructions);
 
+        // Enrich with prices (fire and forget or await?)
+        // Better to await to return complete data
+        await this.enrichActionsWithPrices(actions);
+
         // Calculate fee
         const fee = (tx.meta?.fee || 0) / 1e9;
 
@@ -107,7 +121,18 @@ export class SolanaParser {
 
             if ('version' in tx) {
                 message = tx.message;
-                accountKeys = message.staticAccountKeys;
+                // Resolve Address Lookup Tables if present
+                if ('addressTableLookups' in message && message.addressTableLookups.length > 0) {
+                    const resolver = new AddressResolver(this.connection);
+                    const loadedAddresses = await resolver.resolve(message as MessageV0); // Safe cast after check
+                    accountKeys = [
+                        ...message.staticAccountKeys,
+                        ...loadedAddresses.writable,
+                        ...loadedAddresses.readonly
+                    ];
+                } else {
+                    accountKeys = message.staticAccountKeys;
+                }
             } else {
                 message = tx.compileMessage();
                 accountKeys = message.accountKeys;
@@ -116,6 +141,8 @@ export class SolanaParser {
             // Simulation doesn't easily give inner instructions without special RPC config/support.
             // We will parse the top-level instructions.
             const actions = await this.parseMessageInstructions(message, accountKeys, undefined);
+
+            await this.enrichActionsWithPrices(actions);
 
             return {
                 fee: "0", // Estimated or from simulation if available (unitsConsumed * price)
@@ -210,6 +237,82 @@ export class SolanaParser {
                     },
                     direction: 'UNKNOWN'
                 };
+            }
+        }
+    }
+
+    private async enrichActionsWithPrices(actions: ParsedAction[]) {
+        const mintsToFetch = new Set<string>();
+        const actionsToPrice: { action: ParsedAction, mint: string, amount: number, rawAmount: string }[] = [];
+
+        // 1. Identify actions eligible for pricing
+        for (const action of actions) {
+            const details = action.details as any;
+
+            // Check for explicit mint and amount
+            if (details.mint && (details.amount || details.tokenAmount)) {
+                const mint = details.mint;
+                const rawAmount = details.amount || details.tokenAmount;
+                let amount = 0;
+
+                // Should have decimals for accurate pricing
+                if (typeof details.decimals === 'number') {
+                    amount = Number(rawAmount) / Math.pow(10, details.decimals);
+                } else {
+                    // If decimals missing, we might need to fetch them.
+                    // For now, we only support if decimals are present or if we fetch them.
+                    // Let's defer decimal fetching to a batch step if we want to be robust.
+                    // For now, skip if no decimals? Or try to fetch?
+                    // Let's add to fetch list and we will fetch info.
+                }
+
+                mintsToFetch.add(mint);
+                actionsToPrice.push({ action, mint, amount, rawAmount });
+            }
+        }
+
+        if (mintsToFetch.size === 0) return;
+
+        // 2. Fetch Prices
+        const prices = await this.priceService.getUsdPrices(Array.from(mintsToFetch));
+
+        // 3. Fetch Decimals for missing ones (optimization: only if we have price)
+        // This part requires checking which mints we have pricing for but no decimals in action.
+        // To keep it simple for this iteration, we only calculate if we have decimals in action OR if we add a decimal fetcher.
+        // Let's add a quick decimal fetcher for mints that have price but unknown decimals.
+
+        const mintsNeedingDecimals = actionsToPrice.filter(a => a.amount === 0 && prices[a.mint]).map(a => a.mint);
+        const decimalsMap: Record<string, number> = {};
+
+        if (mintsNeedingDecimals.length > 0) {
+            // Deduplicate
+            const uniqueMints = [...new Set(mintsNeedingDecimals)];
+            // Fetch in batches or one by one
+            for (const mint of uniqueMints) {
+                try {
+                    const info = await this.connection.getParsedAccountInfo(new PublicKey(mint));
+                    if (info.value && 'parsed' in info.value.data) {
+                        decimalsMap[mint] = info.value.data.parsed.info.decimals;
+                    }
+                } catch (e) {
+                    console.warn(`Failed to fetch decimals for ${mint}`, e);
+                }
+            }
+        }
+
+        // 4. Apply prices
+        for (const item of actionsToPrice) {
+            const price = prices[item.mint];
+            if (price) {
+                let finalAmount = item.amount;
+                // If amount was 0 because of missing decimals, try to resolve
+                if (finalAmount === 0 && decimalsMap[item.mint] !== undefined) {
+                    finalAmount = Number(item.rawAmount) / Math.pow(10, decimalsMap[item.mint]);
+                }
+
+                if (finalAmount > 0) {
+                    item.action.totalUsd = finalAmount * price;
+                }
             }
         }
     }

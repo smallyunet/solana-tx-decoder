@@ -33,6 +33,15 @@ export const TransactionView: React.FC<TransactionViewProps> = ({ result }) => {
                 <div style={{ marginTop: '0.5rem', opacity: 0.7, fontSize: '0.9rem' }}>
                     <div>Sig: <span style={{ fontFamily: 'monospace' }}>{result.signature}</span></div>
                     <div>Fee: {result.fee} SOL</div>
+                    <div>Sig: <span style={{ fontFamily: 'monospace' }}>{result.signature}</span></div>
+                    <div>Fee: {result.fee} SOL</div>
+                    {(() => {
+                        const totalValue = result.actions.reduce((sum, action) => sum + (action.totalUsd || 0), 0);
+                        if (totalValue > 0) {
+                            return <div>Total Value: ${totalValue.toFixed(2)}</div>
+                        }
+                        return null;
+                    })()}
                 </div>
             </header>
 

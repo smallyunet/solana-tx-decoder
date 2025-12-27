@@ -14,6 +14,7 @@ export interface ParsedAction {
     summary: string;
     details: Record<string, unknown>;
     direction?: ActionDirection;
+    totalUsd?: number;
 }
 
 export interface ParsedResult {
