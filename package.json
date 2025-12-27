@@ -15,7 +15,7 @@
     "test:e2e": "vitest run tests/e2e.test.ts",
     "test:all": "vitest run",
     "build": "tsc",
-    "build:docs": "typedoc --out docs src/index.ts",
+    "build:docs": "typedoc --out docs/api src/index.ts",
     "prepublishOnly": "pnpm build",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",

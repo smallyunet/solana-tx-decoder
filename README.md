@@ -17,7 +17,7 @@ A robust, extensible TypeScript library for parsing Solana transactions into str
 
 ## Examples
 
-Check out the [examples](./examples) directory for usage scenarios, see the [Examples & Results](./docs/EXAMPLES.md) document for a showcase of parsed outputs, or visit the [Live Demo](https://smallyunet.github.io/solana-tx-decoder/demo/).
+Check out the [examples](./examples) directory for usage scenarios, see the [Examples & Results](./docs/EXAMPLES.md) document for a showcase of parsed outputs, or visit the [Live Demo](https://smallyunet.github.io/solana-tx-decoder/).
 
 ## Installation
 
@@ -71,3 +71,10 @@ class MyProtocolParser implements Parser {
 
 parser.getRegistry().register(new MyProtocolParser());
 ```
+
+## Links
+
+- [Live Demo](https://smallyunet.github.io/solana-tx-decoder/)
+- [API Reference](https://smallyunet.github.io/solana-tx-decoder/api/)
+- [Examples and Results](./docs/EXAMPLES.md)
+

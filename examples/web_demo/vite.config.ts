@@ -12,7 +12,7 @@ export default defineConfig({
     ],
     base: './',
     build: {
-        outDir: '../../docs/demo',
+        outDir: '../../docs',
         emptyOutDir: true
     },
     resolve: {
