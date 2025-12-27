@@ -17,7 +17,7 @@ A robust, extensible TypeScript library for parsing Solana transactions into str
 
 ## Examples
 
-Check out the [examples](./examples) directory for usage scenarios, or see the [Examples & Results](./docs/EXAMPLES.md) document for a showcase of parsed outputs across different protocols.
+Check out the [examples](./examples) directory for usage scenarios, see the [Examples & Results](./docs/EXAMPLES.md) document for a showcase of parsed outputs, or visit the [Live Demo](https://smallyunet.github.io/solana-tx-decoder/demo/).
 
 ## Installation
 
