@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.5] - 2025-12-27
+
+### Added
+
+- **Raydium Parser**: Full support for AMM V4, CLMM, and CP-Swap
+  - Add/Remove Liquidity operations
+  - Initialize Pool detection
+  - Multiple program ID support
+- **Orca Parser**: Full Whirlpool protocol support
+  - Position management (Open/Close Position)
+  - Liquidity operations (Increase/Decrease Liquidity)
+  - Fee and reward collection
+  - Two-hop swap support
+  - Native instruction parsing with Anchor fallback
+- New test suite for Orca Whirlpool operations
+
+### Changed
+
+- Unified Raydium swap type to `Swap` with `swapType` in details
+- Protocol name updated to `Orca Whirlpool` for clarity
+
 ## [0.0.4] - 2024-12-27
 
 ### Added
