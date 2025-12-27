@@ -15,34 +15,35 @@ describe('JupiterParser', () => {
             data
         },
         accounts: [],
-        programId
+        programId,
+        connection: {} as any // mock connection
     });
 
-    it('should identify Route instruction', () => {
+    it('should identify Route instruction', async () => {
         // e517cb977ae3ad2a
         const data = Buffer.from('e517cb977ae3ad2a', 'hex');
         const ctx = createCtx(data);
-        const result = parser.parse(ctx);
+        const result = await parser.parse(ctx);
 
         expect(result).not.toBeNull();
         expect(result?.type).toBe('Swap (Route)');
         expect(result?.protocol).toBe('Jupiter');
     });
 
-    it('should identify SharedAccountsRoute instruction', () => {
+    it('should identify SharedAccountsRoute instruction', async () => {
         // c1209b3341d69c81
         const data = Buffer.from('c1209b3341d69c81', 'hex');
         const ctx = createCtx(data);
-        const result = parser.parse(ctx);
+        const result = await parser.parse(ctx);
 
         expect(result).not.toBeNull();
         expect(result?.type).toBe('Swap (SharedAccounts)');
     });
 
-    it('should return Unknown for other instructions', () => {
+    it('should return Unknown for other instructions', async () => {
         const data = Buffer.from('0000000000000000', 'hex');
         const ctx = createCtx(data);
-        const result = parser.parse(ctx);
+        const result = await parser.parse(ctx);
 
         expect(result).not.toBeNull();
         expect(result?.type).toBe('Unknown');

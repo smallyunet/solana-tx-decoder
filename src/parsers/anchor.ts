@@ -2,39 +2,78 @@ import { PublicKey } from '@solana/web3.js';
 import { Program, Idl, AnchorProvider } from '@coral-xyz/anchor';
 import { Parser, ParserContext, ParsedAction } from '../types';
 
+// Dummy wallet for read-only provider
+const READ_ONLY_WALLET = {
+    publicKey: PublicKey.default,
+    signTransaction: async (tx: any) => tx,
+    signAllTransactions: async (txs: any[]) => txs,
+};
+
 export class AnchorParser implements Parser {
-    programId: PublicKey; // This is dynamic, so we might need a different interface or this parser handles ALL unknown programs if configured.
+    programId: PublicKey;
+    static idlCache: Map<string, Idl> = new Map();
 
     constructor() {
-        this.programId = PublicKey.default; // Not used when acting as generic fallback
+        this.programId = PublicKey.default;
     }
 
-    // The registry might need a way to support "fallback" parsers or parsers that handle multiple program IDs.
-    // For now, this class might be instantiated for a specific program ID found in the transaction.
-
     async parse(context: ParserContext): Promise<ParsedAction | null> {
-        const { programId, instruction, accounts } = context;
+        const { programId, instruction, connection } = context;
+        const programIdString = programId.toBase58();
 
-        // In a real implementation, we would:
-        // 1. Check if we have the IDL cached.
-        // 2. If not, fetch it from chain (Program.fetchIdl).
-        // 3. Decode instruction layout using the IDL.
-
-        // Skeleton implementation
         try {
-            // const idl = await Program.fetchIdl(programId, provider);
-            // if (!idl) return null;
+            let idl = AnchorParser.idlCache.get(programIdString);
 
-            // Decode...
-            return {
-                protocol: 'Unknown Anchor Protocol', // We'd get this from IDL name
-                type: 'Unknown Instruction',
-                summary: 'Anchor Instruction',
-                details: {
-                    data: instruction.data.toString('hex')
+            // Create a read-only provider
+            const provider = new AnchorProvider(
+                connection,
+                READ_ONLY_WALLET,
+                { commitment: 'confirmed' }
+            );
+
+            if (!idl) {
+                // Fetch IDL
+                const fetchedIdl = await Program.fetchIdl(programId, provider);
+                if (fetchedIdl) {
+                    idl = fetchedIdl;
+                    AnchorParser.idlCache.set(programIdString, idl);
                 }
-            };
+            }
+
+            if (!idl) {
+                return null;
+            }
+
+            const program = new Program(idl, provider);
+            const decoded = (program.coder.instruction as any).decode(instruction.data);
+
+            if (decoded) {
+                // helper to format data
+                const formattedData: any = {};
+                // @ts-ignore
+                if (decoded.data) {
+                    // @ts-ignore
+                    for (const [key, value] of Object.entries(decoded.data)) {
+                        formattedData[key] = value && value.toString ? value.toString() : value;
+                    }
+                }
+
+                return {
+                    protocol: idl.metadata?.name || 'Unknown Anchor Protocol',
+                    type: decoded.name,
+                    summary: `${idl.metadata?.name || 'Anchor'} Instruction: ${decoded.name}`,
+                    details: {
+                        name: decoded.name,
+                        data: formattedData
+                    },
+                    direction: 'UNKNOWN'
+                };
+            }
+
+            return null;
         } catch (e) {
+            // console.error("Anchor parse error", e);
+            // Silent fail to allow fallback or just return null
             return null;
         }
     }

@@ -1,10 +1,19 @@
 import { PublicKey } from '@solana/web3.js';
 import { Parser, ParserContext, ParsedAction } from '../types';
+import { AnchorParser } from './anchor';
 
 export class JupiterParser implements Parser {
     programId = new PublicKey("JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4");
 
-    parse(context: ParserContext): ParsedAction | null {
+    async parse(context: ParserContext): Promise<ParsedAction | null> {
+        // Try Anchor parsing first (IDL based)
+        const anchorParser = new AnchorParser();
+        const anchorAction = await anchorParser.parse(context);
+        if (anchorAction) {
+            return anchorAction;
+        }
+
+        // Fallback: Manual hex matching
         const { instruction } = context;
         const data = instruction.data;
 

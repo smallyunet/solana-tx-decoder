@@ -148,7 +148,8 @@ export class SolanaParser {
                         data: Buffer.from(ix.data),
                     },
                     accounts: accountKeys,
-                    programId
+                    programId,
+                    connection: this.connection
                 };
                 const action = await parser.parse(context);
                 if (action) actions.push(action);
@@ -166,7 +167,8 @@ export class SolanaParser {
                         data: Buffer.from(ix.data),
                     },
                     accounts: accountKeys,
-                    programId
+                    programId,
+                    connection: this.connection
                 };
 
                 const anchorAction = await this.anchorParser.parse(context);
@@ -202,7 +204,8 @@ export class SolanaParser {
                                 data: Buffer.from(ix.data),
                             },
                             accounts: accountKeys,
-                            programId
+                            programId,
+                            connection: this.connection
                         };
                         const action = await parser.parse(context);
                         if (action) actions.push(action);
@@ -217,7 +220,8 @@ export class SolanaParser {
                                 data: Buffer.from(ix.data),
                             },
                             accounts: accountKeys, // Note: might need better account resolution for inner instructions context if they rely on index
-                            programId
+                            programId,
+                            connection: this.connection
                         };
                         const anchorAction = await this.anchorParser.parse(context);
                         if (anchorAction) {

@@ -16,7 +16,8 @@ describe('SplTokenParser', () => {
             data
         },
         accounts: [],
-        programId: tokenProgramId
+        programId: tokenProgramId,
+        connection: {} as any
     });
 
     it('should parse Transfer', () => {

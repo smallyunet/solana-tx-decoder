@@ -1,6 +1,6 @@
 // import { TranslationEnum } from './parsers/types';
 
-import { TransactionResponse, VersionedTransactionResponse, TransactionInstruction, PublicKey } from '@solana/web3.js';
+import { TransactionResponse, VersionedTransactionResponse, TransactionInstruction, PublicKey, Connection } from '@solana/web3.js';
 
 export type SupportedProtocol = 'System' | 'SPL Token' | 'Jupiter' | 'Raydium' | 'Orca' | 'Unknown' | string;
 
@@ -29,6 +29,7 @@ export interface ParserContext {
     instruction: TransactionInstruction;
     accounts: PublicKey[];
     programId: PublicKey;
+    connection: Connection;
 }
 
 export interface Parser {
