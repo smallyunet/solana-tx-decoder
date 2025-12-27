@@ -62,10 +62,14 @@ export const App: React.FC = () => {
         }
     };
 
+    // Real transaction signatures from Solscan mainnet
     const examples = [
-        { label: 'SOL Transfer', id: '5UfDuX7WXY18keiz9mZ6zKkY8JyNuLDFz2UMGqE8CRN57pRBbME6VxWJbHqftiXxhozVhzR3vo4qJpUktqt5sMEj' },
-        { label: 'USDC Transfer', id: '4vD3pSETPxuoMXrYhY3naJgfpEqyfqvv7xSfPvnTUXFp4y9FZv4v6vEpQPvHUfXmNLfVsVZHkZGkJWmz1xnfkPxL' },
-        { label: 'Jupiter Swap', id: '3gyPgPLkRT98vMZRd3RhBrK6z7HeHrXhBfJeyxZQNGHrBJJquJkW8mvFrABhJu4RP5aJ9zgg4F6DmWxWwjf2pump' }
+        // Raydium AMM V4 transactions (real mainnet data)
+        { label: 'Raydium Swap', id: '3oPfvbCztaNEpbtSib2DezyzjvSwxv7mZv8peCoAuiRijetvFM3TspWthxzETGkYYuxjVGa6HbdEKjiv9vZzd3Up' },
+        { label: 'Raydium Route', id: '3cBjqB67PwX2qwghME2wsDNQJwMz17nYT2pUJZXoujCs4tB5ix2UJUssANpkcQeVd6EwtAuJU3Dh46UF3d8CjPB6' },
+        // Orca Whirlpool transactions (real mainnet data)
+        { label: 'Orca Swap', id: '3EWQN5tjCMMsxavQdJz9FD4ZSUbfFdyzmA9Ndf8Sa7NRmSJLq84PWi3BVTgE6wsk2G8xhhuMVT5Yq8GUWUeE6h34' },
+        { label: 'Orca Route', id: '4MSqXd7fsTyD9xTEBkHjLdWEJSqNDJ2u9GaKwLiBHSZmqjQ28K1gUtiUQRmVAzyS1XEedjNuQzFinVzfMDT2KTFT' },
     ];
 
     return (
@@ -250,17 +254,27 @@ export const App: React.FC = () => {
                     <section style={{ padding: '0 1rem' }}>
                         <h3 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '1rem' }}>Supported Protocols</h3>
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.6rem' }}>
-                            {['Jupiter', 'Raydium', 'Orca', 'SPL Token', 'System'].map(p => (
-                                <span key={p} style={{
+                            {[
+                                { name: 'Jupiter', new: false },
+                                { name: 'Raydium', new: true },
+                                { name: 'Orca', new: true },
+                                { name: 'SPL Token', new: false },
+                                { name: 'System', new: false }
+                            ].map(p => (
+                                <span key={p.name} style={{
                                     fontSize: '0.8rem',
                                     padding: '0.4rem 0.8rem',
-                                    backgroundColor: '#1a1a1a',
+                                    backgroundColor: p.new ? 'rgba(20,241,149,0.1)' : '#1a1a1a',
                                     borderRadius: '6px',
-                                    border: '1px solid #222',
-                                    opacity: 0.8
-                                }}>{p}</span>
+                                    border: p.new ? '1px solid rgba(20,241,149,0.3)' : '1px solid #222',
+                                    opacity: 0.9,
+                                    color: p.new ? '#14F195' : 'inherit'
+                                }}>{p.name} {p.new && '✨'}</span>
                             ))}
                         </div>
+                        <p style={{ fontSize: '0.75rem', opacity: 0.4, marginTop: '0.8rem' }}>
+                            ✨ New: Full liquidity operations support
+                        </p>
                     </section>
 
                     <section style={{ padding: '1.5rem', backgroundColor: 'rgba(153,69,255,0.05)', borderRadius: '20px', border: '1px solid rgba(153,69,255,0.1)' }}>
