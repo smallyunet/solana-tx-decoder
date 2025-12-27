@@ -1,7 +1,7 @@
 {
   "name": "solana-tx-decoder",
   "version": "0.0.4",
-  "description": "",
+  "description": "A robust, extensible TypeScript library for parsing Solana transactions into structured, human-readable data",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -14,12 +14,37 @@
     "test": "vitest",
     "build": "tsc",
     "build:docs": "typedoc --out docs src/index.ts",
-    "prepublishOnly": "pnpm build"
+    "prepublishOnly": "pnpm build",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\""
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "solana",
+    "transaction",
+    "decoder",
+    "parser",
+    "blockchain",
+    "web3",
+    "anchor",
+    "spl-token",
+    "jupiter"
+  ],
+  "author": "smallyu",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smallyunet/solana-tx-decoder.git"
+  },
+  "homepage": "https://github.com/smallyunet/solana-tx-decoder#readme",
+  "bugs": {
+    "url": "https://github.com/smallyunet/solana-tx-decoder/issues"
+  },
   "packageManager": "pnpm@10.14.0",
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
     "@coral-xyz/anchor": "^0.32.1",
     "@solana/web3.js": "^1.98.4",
@@ -27,6 +52,10 @@
   },
   "devDependencies": {
     "@types/node": "^25.0.2",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "eslint": "^9.0.0",
+    "prettier": "^3.4.0",
     "typedoc": "^0.28.15",
     "typescript": "^5.9.3",
     "vitest": "^4.0.15"

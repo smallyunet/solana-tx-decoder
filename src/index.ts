@@ -6,6 +6,10 @@ import { JupiterParser } from './parsers/jupiter';
 import { AnchorParser } from './parsers/anchor';
 import { ParsedResult, ParserContext, ParsedAction } from './types';
 
+// Re-export types for consumers
+export * from './types';
+export { ParserRegistry } from './core/registry';
+
 export class SolanaParser {
     private connection: Connection;
     private registry: ParserRegistry;
