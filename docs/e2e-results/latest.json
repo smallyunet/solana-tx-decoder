@@ -1,0 +1,94 @@
+{
+  "timestamp": "2025-12-28T10:18:55.985Z",
+  "rpcEndpoint": "Mainnet (redacted)",
+  "results": [
+    {
+      "protocol": "Raydium AMM V4",
+      "signature": "3oPfvbCztaNEpbtSib2DezyzjvSwxv7mZv8peCoAuiRijetvFM3TspWthxzETGkYYuxjVGa6HbdEKjiv9vZzd3Up",
+      "success": false,
+      "actions": [],
+      "error": "429 Too Many Requests:  {\"jsonrpc\":\"2.0\",\"error\":{\"code\": 429, \"message\":\"Too many requests for a specific RPC call\"}, \"id\": \"a4e98b01-3b86-40a5-90a5-b2ecf94d995d\" } \r\n"
+    },
+    {
+      "protocol": "Raydium AMM V4",
+      "signature": "3cBjqB67PwX2qwghME2wsDNQJwMz17nYT2pUJZXoujCs4tB5ix2UJUssANpkcQeVd6EwtAuJU3Dh46UF3d8CjPB6",
+      "success": false,
+      "actions": [],
+      "error": "429 Too Many Requests:  {\"jsonrpc\":\"2.0\",\"error\":{\"code\": 429, \"message\":\"Too many requests for a specific RPC call\"}, \"id\": \"9daf64bd-64ab-43a5-803a-17ecd9cfbda9\" } \r\n"
+    },
+    {
+      "protocol": "Orca Whirlpool",
+      "signature": "3EWQN5tjCMMsxavQdJz9FD4ZSUbfFdyzmA9Ndf8Sa7NRmSJLq84PWi3BVTgE6wsk2G8xhhuMVT5Yq8GUWUeE6h34",
+      "success": false,
+      "actions": [],
+      "error": "429 Too Many Requests:  {\"jsonrpc\":\"2.0\",\"error\":{\"code\": 429, \"message\":\"Too many requests for a specific RPC call\"}, \"id\": \"ac783cdb-172a-49d8-8ff9-20f09c54a38c\" } \r\n"
+    },
+    {
+      "protocol": "Orca Whirlpool",
+      "signature": "4MSqXd7fsTyD9xTEBkHjLdWEJSqNDJ2u9GaKwLiBHSZmqjQ28K1gUtiUQRmVAzyS1XEedjNuQzFinVzfMDT2KTFT",
+      "success": true,
+      "actions": [
+        {
+          "protocol": "Unknown",
+          "type": "Unknown",
+          "summary": "Instruction for program ComputeBudget111111111111111111111111111111"
+        },
+        {
+          "protocol": "jupiter",
+          "type": "route",
+          "summary": "Jupiter Swap: 5266216755 -> 5266298018 (Quoted)"
+        },
+        {
+          "protocol": "System",
+          "type": "Transfer",
+          "summary": "Transferred 0.001654189 SOL"
+        },
+        {
+          "protocol": "Unknown",
+          "type": "Unknown",
+          "summary": "Instruction for program AAAAAV2e3caMofti2JSrzsQB3sGVfTWQa7yZcornTnpe"
+        },
+        {
+          "protocol": "Unknown",
+          "type": "Unknown",
+          "summary": "Instruction for program 9H6tua7jkLhdm3w8BvgpTn5LZNU7g4ZynDmCiNN3q6Rp"
+        },
+        {
+          "protocol": "SPL Token",
+          "type": "Unknown",
+          "summary": "Unknown SPL Token instruction type 51"
+        },
+        {
+          "protocol": "SPL Token",
+          "type": "Unknown",
+          "summary": "Unknown SPL Token instruction type 51"
+        },
+        {
+          "protocol": "Jupiter",
+          "type": "Unknown",
+          "summary": "Jupiter Instruction"
+        },
+        {
+          "protocol": "Orca Whirlpool",
+          "type": "Unknown",
+          "summary": "Orca Whirlpool: Unknown Instruction"
+        },
+        {
+          "protocol": "SPL Token",
+          "type": "Unknown",
+          "summary": "Unknown SPL Token instruction type 51"
+        },
+        {
+          "protocol": "SPL Token",
+          "type": "Unknown",
+          "summary": "Unknown SPL Token instruction type 51"
+        },
+        {
+          "protocol": "Jupiter",
+          "type": "Unknown",
+          "summary": "Jupiter Instruction"
+        }
+      ]
+    }
+  ]
+}

@@ -7,7 +7,8 @@ The Solana Transaction Decoder supports a plugin system that allows you to easil
 A plugin is simply an object that implements the `Plugin` interface:
 
 ```typescript
-import { Plugin, ParserRegistry, Parser, ParserContext, ParsedAction } from 'solana-tx-decoder';
+import { ParserRegistry, Parser, ParserContext, ParsedAction } from '../src/types';
+import { Plugin } from '../src/core/registry';
 import { PublicKey } from '@solana/web3.js';
 
 export class MyProtocolPlugin implements Plugin {
