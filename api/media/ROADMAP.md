@@ -21,5 +21,5 @@
 
 ## Phase 4: Advanced Features (Q2 2026)
 - [x] **Price Feed Integration**: Fetch USD values for token transfers at the time of transaction.
-- [ ] **Visualizer UI**: A React component library to display parsed results.
-- [ ] **Plugin System**: Allow dynamic loading of external parser schemas.
+- [/] **Visualizer UI**: A React component library to display parsed results.
+- [x] **Plugin System**: Allow dynamic loading of external parser schemas.

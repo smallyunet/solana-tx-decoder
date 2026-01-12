@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.7] - 2026-01-12
+
+### Added
+
+- **Plugin System Enhancement**: Dynamic loading of external parser plugins
+  - `PluginLoader` class for loading plugins from JSON schemas or URLs
+  - `PluginSchema` interface for defining parser configurations
+  - `loadPlugin()` and `installFromUrl()` methods on `ParserRegistry`
+- **Visualizer UI Components**:
+  - `TransactionSummary` component for compact transaction overview
+  - `TokenFlow` component for visual token movement display
+  - Added Raydium (orange) and Orca (cyan) protocol colors to `ActionCard`
+
+### Fixed
+
+- Removed duplicate signature and fee display in `TransactionView`
+
 ## [0.0.5] - 2025-12-27
 
 ### Added
