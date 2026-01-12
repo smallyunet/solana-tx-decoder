@@ -12,6 +12,9 @@ export const ActionCard: React.FC<ActionCardProps> = ({ action, index }) => {
             case 'system': return '#007AFF';
             case 'spl token': return '#14F195';
             case 'jupiter': return '#9945FF';
+            case 'raydium': return '#F5A623';
+            case 'orca whirlpool':
+            case 'orca': return '#00D1FF';
             default: return '#8E8E93';
         }
     };

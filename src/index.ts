@@ -12,9 +12,12 @@ import { PriceService, JupiterPriceService } from './services/price-service';
 
 // Re-export types for consumers
 export * from './types';
-export { ParserRegistry } from './core/registry';
+export { ParserRegistry, Plugin } from './core/registry';
+export { PluginLoader, PluginSchema, ParserDefinition, InstructionPattern } from './core/plugin-loader';
 export { TransactionView } from './ui/TransactionView';
 export { ActionCard } from './ui/components/ActionCard';
+export { TransactionSummary } from './ui/components/TransactionSummary';
+export { TokenFlow } from './ui/components/TokenFlow';
 
 export class SolanaParser {
     private connection: Connection;
