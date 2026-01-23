@@ -11,7 +11,7 @@
 - [x] CI/CD Pipelines (GitHub Actions)
 - [x] Automated Testing Setup
 - [x] API Documentation (TypeDoc)
-- [ ] Community Guidelines
+- [x] Community Guidelines
 
 ## Phase 3: Protocol Expansion (Q1 2026)
 - [x] **SPL Token Parser**: Full support for mints, burns, and transfers.

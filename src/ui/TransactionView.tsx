@@ -1,12 +1,15 @@
 import React from 'react';
 import { ParsedResult } from '../types';
 import { ActionCard } from './components/ActionCard';
+import { TransactionSummary } from './components/TransactionSummary';
 
 interface TransactionViewProps {
     result: ParsedResult;
 }
 
 export const TransactionView: React.FC<TransactionViewProps> = ({ result }) => {
+    const formattedTimestamp = formatTimestamp(result.timestamp);
+
     return (
         <div className="stx-visualizer" style={{
             backgroundColor: '#121212',
@@ -19,29 +22,14 @@ export const TransactionView: React.FC<TransactionViewProps> = ({ result }) => {
             <header style={{ marginBottom: '2rem', borderBottom: '1px solid #333', paddingBottom: '1rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <h2 style={{ margin: 0 }}>Transaction Details</h2>
-                    <span style={{
-                        backgroundColor: result.success ? '#14F195' : '#FF4B4B',
-                        color: '#000',
-                        padding: '4px 12px',
-                        borderRadius: '20px',
-                        fontWeight: 'bold',
-                        fontSize: '0.8rem'
-                    }}>
-                        {result.success ? 'SUCCESS' : 'FAILED'}
-                    </span>
                 </div>
                 <div style={{ marginTop: '0.5rem', opacity: 0.7, fontSize: '0.9rem' }}>
                     <div>Sig: <span style={{ fontFamily: 'monospace' }}>{result.signature}</span></div>
-                    <div>Fee: {result.fee} SOL</div>
-                    {(() => {
-                        const totalValue = result.actions.reduce((sum, action) => sum + (action.totalUsd || 0), 0);
-                        if (totalValue > 0) {
-                            return <div>Total Value: ${totalValue.toFixed(2)}</div>
-                        }
-                        return null;
-                    })()}
+                    {formattedTimestamp}
                 </div>
             </header>
+
+            <TransactionSummary result={result} />
 
             <div className="actions-list" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 {result.actions.map((action, index) => (
@@ -50,4 +38,13 @@ export const TransactionView: React.FC<TransactionViewProps> = ({ result }) => {
             </div>
         </div>
     );
+};
+
+const formatTimestamp = (timestamp?: number) => {
+    if (typeof timestamp === 'number') {
+        const formatted = new Date(timestamp * 1000).toLocaleString();
+        return <div>Time: {formatted}</div>;
+    } else {
+        return null;
+    }
 };

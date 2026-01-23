@@ -87,7 +87,7 @@ export const App: React.FC = () => {
                         color: '#000',
                         textDecoration: 'none',
                         fontWeight: 700
-                    }}>v0.0.5 Early Access</a>
+                    }}>v0.0.8 Early Access</a>
                 </div>
             </nav>
 
@@ -261,7 +261,7 @@ export const App: React.FC = () => {
             </div>
 
             <footer style={{ borderTop: '1px solid #1a1a1a', paddingTop: '3rem', opacity: 0.4, fontSize: '0.9rem', textAlign: 'center' }}>
-                <p>&copy; 2025 Solana Tx Visualizer. All rights reserved.</p>
+                <p>&copy; 2026 Solana Tx Visualizer. All rights reserved.</p>
                 <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'center', gap: '2rem' }}>
                     <a href="#" style={{ color: '#fff', textDecoration: 'none' }}>Privacy</a>
                     <a href="#" style={{ color: '#fff', textDecoration: 'none' }}>Terms</a>

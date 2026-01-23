@@ -1,5 +1,6 @@
 import React from 'react';
 import { ParsedResult } from '../../types';
+import { getProtocolColor, getProtocolGroup } from '../theme';
 
 interface TransactionSummaryProps {
     result: ParsedResult;
@@ -9,23 +10,26 @@ interface TransactionSummaryProps {
  * Compact summary component showing key transaction information.
  */
 export const TransactionSummary: React.FC<TransactionSummaryProps> = ({ result }) => {
-    const totalValue = result.actions.reduce((sum, action) => sum + (action.totalUsd || 0), 0);
+    let totalValue = 0;
+    const protocolCounts: Record<string, number> = {};
 
-    // Count protocol occurrences
-    const protocolCounts = result.actions.reduce((acc, action) => {
-        acc[action.protocol] = (acc[action.protocol] || 0) + 1;
-        return acc;
-    }, {} as Record<string, number>);
+    for (const action of result.actions) {
+        if (typeof action.totalUsd === 'number') {
+            totalValue += action.totalUsd;
+        } else {
+            totalValue += 0;
+        }
 
-    const protocolColors: Record<string, string> = {
-        'System': '#007AFF',
-        'SPL Token': '#14F195',
-        'Jupiter': '#9945FF',
-        'Raydium': '#F5A623',
-        'Orca Whirlpool': '#00D1FF',
-        'Orca': '#00D1FF',
-        'Unknown': '#8E8E93'
-    };
+        const protocolGroup = getProtocolGroup(action.protocol);
+        if (Object.prototype.hasOwnProperty.call(protocolCounts, protocolGroup)) {
+            protocolCounts[protocolGroup] = protocolCounts[protocolGroup] + 1;
+        } else {
+            protocolCounts[protocolGroup] = 1;
+        }
+    }
+
+    const totalValueSection = renderTotalValue(totalValue);
+    const protocolBadges = renderProtocolBadges(protocolCounts);
 
     return (
         <div className="tx-summary" style={{
@@ -62,23 +66,7 @@ export const TransactionSummary: React.FC<TransactionSummaryProps> = ({ result }
             </div>
 
             {/* Total USD Value */}
-            {totalValue > 0 && (
-                <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.5rem',
-                    color: '#888'
-                }}>
-                    <span style={{ fontSize: '0.85rem' }}>Value:</span>
-                    <span style={{
-                        fontFamily: 'monospace',
-                        color: '#14F195',
-                        fontWeight: 'bold'
-                    }}>
-                        ${totalValue.toFixed(2)}
-                    </span>
-                </div>
-            )}
+            {totalValueSection}
 
             {/* Protocol Breakdown */}
             <div style={{
@@ -86,19 +74,49 @@ export const TransactionSummary: React.FC<TransactionSummaryProps> = ({ result }
                 gap: '0.5rem',
                 marginLeft: 'auto'
             }}>
-                {Object.entries(protocolCounts).map(([protocol, count]) => (
-                    <span key={protocol} style={{
-                        backgroundColor: protocolColors[protocol] || protocolColors['Unknown'],
-                        color: '#000',
-                        padding: '4px 10px',
-                        borderRadius: '12px',
-                        fontSize: '0.75rem',
-                        fontWeight: 'bold'
-                    }}>
-                        {protocol} ({count})
-                    </span>
-                ))}
+                {protocolBadges}
             </div>
         </div>
     );
+};
+
+const renderTotalValue = (totalValue: number) => {
+    if (totalValue > 0) {
+        return (
+            <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                color: '#888'
+            }}>
+                <span style={{ fontSize: '0.85rem' }}>Value:</span>
+                <span style={{
+                    fontFamily: 'monospace',
+                    color: '#14F195',
+                    fontWeight: 'bold'
+                }}>
+                    ${totalValue.toFixed(2)}
+                </span>
+            </div>
+        );
+    } else {
+        return null;
+    }
+};
+
+const renderProtocolBadges = (protocolCounts: Record<string, number>) => {
+    const entries = Object.entries(protocolCounts);
+
+    return entries.map(([protocol, count]) => (
+        <span key={protocol} style={{
+            backgroundColor: getProtocolColor(protocol),
+            color: '#000',
+            padding: '4px 10px',
+            borderRadius: '12px',
+            fontSize: '0.75rem',
+            fontWeight: 'bold'
+        }}>
+            {protocol} ({count})
+        </span>
+    ));
 };

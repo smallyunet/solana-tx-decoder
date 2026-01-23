@@ -86,6 +86,7 @@ Check out the [examples](./examples) directory for usage scenarios, or see the [
 - [Examples and Results](./docs/EXAMPLES.md)
 - [Changelog](./CHANGELOG.md)
 - [Roadmap](./ROADMAP.md)
+- [Community Guidelines](./COMMUNITY_GUIDELINES.md)
 
 ## E2E Testing
 
